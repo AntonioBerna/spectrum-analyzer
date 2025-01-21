@@ -4,11 +4,11 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/antonioberna/spectrum-analyzer)
 ![GitHub Created At](https://img.shields.io/github/created-at/antonioberna/spectrum-analyzer)
 
-## demo
+## Demo
 
 https://github.com/user-attachments/assets/eb3b91cd-cf6a-4602-b6fd-9f211323806a
 
-## requirements
+## Requirements
 
 The project requires the following components:
 
@@ -28,7 +28,7 @@ The following is the schematic of the project:
 > [!WARNING]
 > You need to have the [PlatformIO](https://platformio.org/install/ide?install=vscode) extension installed on your Visual Studio Code.
 
-## mini docs
+## Mini docs
 
 If you want to use the project, you need to clone the repository with the following command:
 
@@ -37,3 +37,11 @@ git clone https://github.com/AntonioBerna/spectrum-analyzer.git
 ```
 
 Then you need to open the project with Visual Studio Code and upload the code to the ESP32 DevKit V1.
+
+## Future improvements
+
+- [ ] Use a MIMS microphone to improve the quality of the audio signal.
+- [ ] Implement I2S protocol to improve the quality of the audio signal.
+- [ ] Use a microSD card to save the audio signal.
+- [ ] Use a TFT display to improve the visualization of the audio signal.
+- [ ] Anything else?
