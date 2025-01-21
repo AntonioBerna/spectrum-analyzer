@@ -1,8 +1,8 @@
 # spectrum-analyzer
 
-![GitHub License](https://img.shields.io/github/license/antonioberna/spec-analyzer)
-![GitHub repo size](https://img.shields.io/github/repo-size/antonioberna/spec-analyzer)
-![GitHub Created At](https://img.shields.io/github/created-at/antonioberna/spec-analyzer)
+![GitHub License](https://img.shields.io/github/license/antonioberna/spectrum-analyzer)
+![GitHub repo size](https://img.shields.io/github/repo-size/antonioberna/spectrum-analyzer)
+![GitHub Created At](https://img.shields.io/github/created-at/antonioberna/spectrum-analyzer)
 
 ## demo
 
