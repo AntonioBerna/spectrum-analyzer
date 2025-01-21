@@ -8,6 +8,9 @@
 
 https://github.com/user-attachments/assets/eb3b91cd-cf6a-4602-b6fd-9f211323806a
 
+> [!TIP]
+> For more information you can access the detailed [explanation of the real-time spectrum analyzer](https://github.com/AntonioBerna/spectrum-analyzer/blob/master/pdf/spectrum-analyzer.pdf). The file contains several technical aspects ranging from computer science, electronics to signal theory and embedded devices. P.S. For now the explanation is only in Italian.
+
 ## Requirements
 
 The project requires the following components:
