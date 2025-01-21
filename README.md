@@ -6,7 +6,7 @@
 
 ## demo
 
-
+https://github.com/user-attachments/assets/eb3b91cd-cf6a-4602-b6fd-9f211323806a
 
 ## mini docs
 
@@ -19,13 +19,13 @@ The project requires the following components:
 The following is the schematic of the project:
 
 <p align="center">
-    <img src=".github/imgs/schema-di-montaggio.png" width="500" />
+    <img src=".github/imgs/schema-di-montaggio.png" width="800" />
 </p>
 
 > [!NOTE]
 > You can find the Fritzing project file in the `.github/fritzing/` directory.
 
-## Download & Usage
+## mini docs
 
 If you want to use the project, you need to clone the repository with the following command:
 
