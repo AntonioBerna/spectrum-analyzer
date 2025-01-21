@@ -37,11 +37,3 @@ git clone https://github.com/AntonioBerna/spectrum-analyzer.git
 ```
 
 Then you need to open the project with Visual Studio Code and upload the code to the ESP32 DevKit V1.
-
-## Future improvements
-
-- [ ] Use a MIMS microphone to improve the quality of the audio signal.
-- [ ] Implement I2S protocol to improve the quality of the audio signal.
-- [ ] Use a microSD card to save the audio signal.
-- [ ] Use a TFT display to improve the visualization of the audio signal.
-- [ ] Anything else?
