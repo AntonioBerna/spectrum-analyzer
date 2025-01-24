@@ -83,23 +83,27 @@ void EngineFFT::fft(void) {
   double re_W_l = -1.0;
   double im_W_l = 0.0;
   
-  // size of the next sub-DFT
-  // after log2(samples) iterations => next_size = samples = N
+  // Size of the next sub-DFT doubles at each iteration.
+  // After log2(samples) iterations, `next_size` will be equal to `SAMPLES`.
   uint16_t next_size = 1;
   
   for (uint8_t l = 0; l < this->levels; ++l) { // levels = log2(samples)
-    // size of the current sub-DFT
-    // after log2(samples) iterations => curr_size = samples / 2 = N / 2
+    // Size of the current sub-DFT (curr_size) for this FFT level.
     uint16_t curr_size = next_size;
     next_size <<= 1;
 
     // Twiddle Factor: W_{N}^{k} = exp(-j * (2 * pi * k) / N)
+    // This is initialized for each sub-DFT computation and updated iteratively.
     double re_W = 1.0;
     double im_W = 0.0;
+
     for (j = 0; j < curr_size; ++j) { // foreach sub-DFT
       for (uint16_t k = j; k < SAMPLES; k += next_size) { // Butterfly Operations
         uint16_t i = k + curr_size; // i = k + N / 2
 
+        // Butterfly Operations: Combine results from smaller sub-DFTs
+        // to form larger sub-DFTs, using the twiddle factor W_{N}^{k}.
+        //
         // W_{N}^{k} * O_k = (a + j * b) * (c + j * d)
         //                 = (a * c - b * d) + j * (a * d + b * c)
         //                 = re_temp + j * im_temp
@@ -118,15 +122,18 @@ void EngineFFT::fft(void) {
         this->im[k] += im_temp;
       }
 
-      // Calculation of the opposite twiddle factor to apply
-      // butterfly operations to the next iteration
+      // Update the twiddle factor W_{N}^{k} to
+      // W_{N}^{k + 1} for the next iteration.
+      // 
+      // This is done by multiplying the current
+      // twiddle factor W_{N}^{k} with W_{N}^{1}.
       double temp = re_W * re_W_l - im_W * im_W_l;
       im_W = re_W * im_W_l + im_W * re_W_l;
       re_W = temp;
     }
 
-    // Before start the next level, we need to calculate
-    // the square root of the twiddle factor
+    // Update the base twiddle factor W_l for the next FFT level.
+    // This involves calculating the square root of the current twiddle factor.
     im_W_l = -sqrt((1.0 - re_W_l) / 2.0);
     re_W_l = sqrt((1.0 + re_W_l) / 2.0);
   }
