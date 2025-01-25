@@ -693,7 +693,8 @@ Per fare ciò va calcolare la radice quadrata del twiddle factor utilizzando la 
 Va sottolineato che nel passaggio dal livello $l$ al livello $l + 1$, il twiddle factor viene calcolato come la radice quadrata del twiddle factor precedente e, dato che il twiddle factor $\left ( W_N^{k} \right )_l$ non è altro che un numero complesso, è possibile calcolarne la radice quadrata utilizzando la seguente formula:
 
 \begin{equation}
-    \left ( W_N^{k} \right )_{l + 1} = \sqrt{\left ( W_N^{k} \right )_l} = \sqrt{\frac{1 + \text{Re}\left [ \left ( W_N^{k} \right )_l \right ]}{2}} - j \cdot \sqrt{\frac{1 - \text{Re}\left [ \left ( W_N^{k} \right )_l \right ]}{2}} \nonumber
+    \label{eq:twiddle_factor}
+    \left ( W_N^{k} \right )_{l + 1} = \sqrt{\left ( W_N^{k} \right )_l} = \sqrt{\frac{1 + \text{Re}\left [ \left ( W_N^{k} \right )_l \right ]}{2}} - j \cdot \sqrt{\frac{1 - \text{Re}\left [ \left ( W_N^{k} \right )_l \right ]}{2}}
 \end{equation}
 
 Tale equazione può essere ottenuta considerando il twiddle factor $\left ( W_N^{k} \right )_l$ come un numero complesso nella forma $z = a + j \cdot b$.
@@ -730,13 +731,7 @@ Ora, considerando l'equazione della circonferenza goniometrica, cioè $x^2 + y^2
     \end{cases} \nonumber
 \end{equation}
 
-Poichè il twiddle factor deve avere una rotazione in senso antiorario, si considera la radice quadrata positiva per la parte reale $x$ e la radice quadrata negativa per la parte immaginaria $y$.
-Pertanto si ottiene:
-
-\begin{equation}
-    \label{eq:twiddle_factor}
-    \sqrt{\left ( W_N^{k} \right )_l} = \sqrt{\frac{1 + \text{Re}\left [ \left ( W_N^{k} \right )_l \right ]}{2}} - j \cdot \sqrt{\frac{1 - \text{Re}\left [ \left ( W_N^{k} \right )_l \right ]}{2}}
-\end{equation}
+Poichè il twiddle factor deve avere una rotazione in senso antiorario, si considera la radice quadrata positiva per la parte reale $x$ e la radice quadrata negativa per la parte immaginaria $y$. Pertanto, dato che $\sqrt{\left ( W_N^{k} \right )_l} = x + j \cdot y$, si ottiene la relazione \eqref{eq:twiddle_factor}.
 
 Passando all'implementazione dell'algoritmo FFT in linguaggio C\texttt{++} per dispositivi embedded, è necessario procedere per step.
 Iniziamo riportando il codice del \textit{bit reversal} all'interno della funzione \lstinlinebg{fft()}:
@@ -1237,6 +1232,7 @@ L'uscita del regolatore da $3.3 \text{V}$ viene distribuita al pin della scheda 
 Generalmente viene alimentata dal connettore Micro USB integrato, ma se si dispone di un alimentatore da $5 \text{V}$, è possibile utilizzare il pin etichettato con \lstinlinebg{VIN} per alimentare direttamente l'ESP32 e le sue periferiche.
 Quest'ultimo metodo è quello che è stato utilizzato in questo progetto per l'alimentazione del display OLED e del sensore KY-037.
 
+% TODO:
 \subsubsection{Periferiche e I/O}
 Sebbene l'ESP32 abbia in totale $30$ pin, solo $25$ di essi sono GPIO (General Purpose Input Output) e quindi accessibili tramite i rispettivi pin che si trovano sulla scheda.
 La piedinatura è la seguente:
