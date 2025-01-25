@@ -58,6 +58,8 @@
     xleftmargin=2.5em,
     framexleftmargin=2em,
     literate={*}{*}{1},
+    emph={Signal, SignalPlotter, __init__, generate, plot_continuous_signal, plot_sampled_signal, AMPLITUDE, F_MAX, T_CONTINUOUS},          % Aggiungi nomi di classi e funzioni
+    emphstyle=\color{codeblue},        % Colore arancione per nomi di classi e funzioni
 }
 
 % Apply the style
@@ -175,64 +177,55 @@ dove $\text{sinc}(x) = \frac{\sin(\pi x)}{\pi x}$ è la funzione seno cardinale.
 
 Sulla base di tale formula, utilizzando il seguente codice scritto in linguaggio Python:
 
-\begin{lstlisting}[language=Python,keywords={import, as, arange, sin, pi, figure, subplot, plot, title, xlabel, ylabel, stem, tight_layout, show}]
+\begin{lstlisting}[language=Python,keywords={def, self, class, title, @staticmethod, import, as, arange, sin, pi, figure, subplot, plot, if, xlabel, ylabel, stem, tight_layout, show}]
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Signal parameters
-amplitude = 1                                  # Signal amplitude
-f_max = 10                                     # Signal maximum frequency
-t = np.arange(0, 1, 0.01)                      # Time axis
-x = amplitude * np.sin(2 * np.pi * f_max * t)  # x(t)
+AMPLITUDE = 1
+F_MAX = 10
+T_CONTINUOUS = np.arange(0, 1, 0.01)
 
-plt.figure(figsize=(12, 10))
+class Signal:
+    def __init__(self, amplitude, frequency):
+        self.amplitude = amplitude
+        self.frequency = frequency
 
-plt.subplot(2, 2, 1)
-plt.plot(t, x)
-plt.title(r"$x(t) = \sin(2 \pi f_{\text{max}} t)$")
-plt.xlabel(r"$t$")
-plt.ylabel(r"$x(t) = \sum_{k = -\infty}^{+\infty} x(k \cdot \Delta t) \cdot sinc \left ( \frac{t}{\Delta t} - k \right )$")
+    def generate(self, time):
+        return self.amplitude * np.sin(2 * np.pi * self.frequency * time)
 
-# (1) f_s > 2 * f_max
-k = 2
-f_s = k * 2 * f_max
-sampling_time = 1 / f_s
-t = np.arange(0, 1 + sampling_time, sampling_time) # k · \Delta t
-x = amplitude * np.sin(2 * np.pi * f_max * t)      # x(t)
+class SignalPlotter:
+    @staticmethod
+    def plot_continuous_signal(signal, time):
+        x_continuous = signal.generate(time)
+        plt.plot(time, x_continuous)
+        plt.title(r"$x(t) = \sin(2 \pi f_{\text{max}} t)$")
+        plt.xlabel(r"$t$")
+        plt.ylabel(r"$x(t)$")
 
-plt.subplot(2, 2, 2)
-plt.stem(t, x)
-plt.title(r"$f_s > 2 f_{\text{max}}$")
-plt.xlabel(r"$t = k \cdot \Delta t$")
-plt.ylabel(r"$x(t) = \sin(2 \pi f_{\text{max}} t)$")
+    @staticmethod
+    def plot_sampled_signal(subplot_position, caption, signal, sampling_frequency):
+        sampling_time = 1 / sampling_frequency
+        t_sampled = np.arange(0, 1 + sampling_time, sampling_time)
+        x_sampled = signal.generate(t_sampled)
+        plt.subplot(2, 2, subplot_position)
+        plt.stem(t_sampled, x_sampled)
+        plt.title(caption)
+        plt.xlabel(r"$t = k \cdot \Delta t$")
+        plt.ylabel(r"$x(t) = \sin(2 \pi f_{\text{max}} t)$")
 
-# (2) f_s < 2 * f_max
-f_s = 10
-sampling_time = 1 / f_s
-t = np.arange(0, 1 + sampling_time, sampling_time) # k · \Delta t
-x = amplitude * np.sin(2 * np.pi * f_max * t)      # x(t)
+if __name__ == "__main__":
+    signal = Signal(amplitude=AMPLITUDE, frequency=F_MAX)
 
-plt.subplot(2, 2, 3)
-plt.stem(t, x)
-plt.title(r"$f_s < 2 f_{\text{max}}$")
-plt.xlabel(r"$t = k \cdot \Delta t$")
-plt.ylabel(r"$x(t) = \sin(2 \pi f_{\text{max}} t)$")
+    plt.figure(figsize=(12, 10))
+    plt.subplot(2, 2, 1)
+    SignalPlotter.plot_continuous_signal(signal, T_CONTINUOUS)
 
-# (3) f_s = 2 * f_max
-k = 1
-f_s = k * 2 * f_max
-sampling_time = 1 / f_s
-t = np.arange(0, 1 + sampling_time, sampling_time) # k · \Delta t
-x = amplitude * np.sin(2 * np.pi * f_max * t)      # x(n)
+    SignalPlotter.plot_sampled_signal(2, r"$f_s > 2 f_{\text{max}}$", signal, sampling_frequency=4 * F_MAX) # f_s > 2 * f_max
+    SignalPlotter.plot_sampled_signal(3, r"$f_s < 2 f_{\text{max}}$", signal, sampling_frequency=10)        # f_s < 2 * f_max
+    SignalPlotter.plot_sampled_signal(4, r"$f_s = 2 f_{\text{max}}$", signal, sampling_frequency=2 * F_MAX) # f_s = 2 * f_max
 
-plt.subplot(2, 2, 4)
-plt.stem(t, x)
-plt.title(r"$f_s = 2 f_{\text{max}}$")
-plt.xlabel(r"$t = k \cdot \Delta t$")
-plt.ylabel(r"$x(t) = \sin(2 \pi f_{\text{max}} t)$")
-
-plt.tight_layout()
-plt.show()
+    plt.tight_layout()
+    plt.show()
 \end{lstlisting}
 
 si ottengono i seguenti grafici:
@@ -269,7 +262,7 @@ Il risultato si può visualizzare in Figura \ref{fig:quantization}, dove viene r
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.35\textwidth]{imgs/Quantization.png}
+    \includegraphics[width=0.5\textwidth]{imgs/Quantization.png}
     \caption{Quantizzazione di un segnale analogico}
     \label{fig:quantization}
 \end{figure}
@@ -289,10 +282,16 @@ La variazione in decibel è data dalla formula:
 \end{equation}
 
 dove $P_1$ e $P_0$ sono le potenze del segnale in uscita e in ingresso, $V_1$ e $V_0$ sono le tensioni del segnale in uscita e in ingresso ed infine $R$ è la resistenza di carico.
-Considerando un generico segnale sinusoidale di tensione elettrica nella forma $v(t) = V_0 \cdot \sin(2 \pi f t)$ dove $V_0$ è l'ampiezza del segnale, $f$ è la frequenza e $t$ è il tempo, sapendo che $V_1 = 2 \cdot V_0$ (perchè con $k + 1$ bit raddoppia l'ampiezza) otterremo il seguente risultato:
+Considerando un generico segnale sinusoidale di tensione elettrica nella seguente forma:
 
 \begin{equation}
-\Delta L \approx 6.02 \ \text{dB} \nonumber
+    v(t) = V_0 \cdot \sin(2 \pi f t) \nonumber
+\end{equation}
+
+dove $V_0$ è l'ampiezza del segnale, $f$ è la frequenza e $t$ è il tempo, sapendo che $V_1 = 2 \cdot V_0$ (perchè con $k + 1$ bit raddoppia l'ampiezza) otterremo il seguente risultato:
+
+\begin{equation}
+    \Delta L \approx 6.02 \ \text{dB} \nonumber
 \end{equation}
 
 \subsection{Sistemi digitali}
@@ -596,7 +595,7 @@ void EngineFFT::swap(double *x, double *y) {
 \subsubsection{Algoritmo di Cooley-Tukey}
 In via preliminare definiamo i concetti di \textit{butterfly operation} e \textit{twiddle factor}.
 
-Una \textit{butterfly operation} è una tecnica utilizzata nell'algoritmo FFT per calcolare la DFT di un segnale diviso in due parti (pari e dispari) definita come segue:
+La \textit{butterfly operation} è una tecnica utilizzata nell'algoritmo FFT per calcolare la DFT di un segnale diviso in due parti (pari e dispari) definita come segue:
 
 \begin{equation}
     \begin{cases}
@@ -614,7 +613,7 @@ In questo caso, il twiddle factor $W_8^k$ è definito come segue:
     W_8^k = e^{-j \frac{\pi k}{4}} \nonumber
 \end{equation}
 
-Trattandosi di un fattore complesso, si otterà il seguente piano di Guass:
+Trattandosi di un fattore complesso, si otterà il piano di Gauss mostrato in Figura \ref{fig:twiddle_factor}.
 
 \begin{figure}[h!]
     \centering
